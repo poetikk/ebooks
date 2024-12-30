@@ -11,6 +11,7 @@ import io.ktor.client.statement.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
+import no.rmy.mediawiki.getAutoNamedLogger
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -54,6 +55,20 @@ fun main() = runBlocking {
             Mode.EPUB3 -> Epub3Maker.create(chapters)
         }
     }
+
+
+
+    getAutoNamedLogger().let { logger ->
+        logger.info("Unique Words: ${WordUsage.usages.size}")
+    }
+
+    File("dict.txt").outputStream().writer().use { writer ->
+        WordUsage.usages.toSortedMap().filter {
+            it.value.size == 1
+        }.forEach {
+            writer.appendLine("${it.key}: ${it.value}")
+        }
+    }
 }
 
 
@@ -90,6 +105,8 @@ class Page(val page: Int, val source: String?) {
 
 
 interface Tag {
+    fun words(): List<String>
+    fun wordsWithContext(): Map<String, List<String>>
     fun html(): String
     fun epub2html(): String
     fun epub3html(): String

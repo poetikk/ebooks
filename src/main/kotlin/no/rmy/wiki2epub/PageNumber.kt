@@ -18,6 +18,9 @@ class PageNumber(content: String) : Tag {
         return "<span epub:type=\"pagebreak\" title=\"$number\" id=\"side$number\"></span>"
     }
 
+    override fun words(): List<String> = listOf()
+    override fun wordsWithContext(): Map<String, List<String>> = mapOf()
+
     fun spannedNumberHtml(): String {
         return "<span>$number</span>"
     }

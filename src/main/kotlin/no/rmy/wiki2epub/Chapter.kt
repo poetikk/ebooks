@@ -27,6 +27,18 @@ class Chapter(val content: String, val useStyle: Boolean) {
     else
         tagsNormal()
 
+    fun calcWordUsage(): WordUsage = tags().map {
+        it.wordsWithContext()
+    }.let { maps ->
+        val m = WordUsage()
+        maps.map {
+            WordUsage(it)
+        }.let {
+            m.append(it)
+        }
+        m
+    }
+
     fun tagsPoem(): List<Tag> =
         content.split(Regex("\\{\\{gap\\|1em\\}\\}|\\{\\{Innrykk\\|1\\}\\}")).map {
             Paragraph.create(it)
@@ -141,7 +153,9 @@ ${body}
             }
 
 
-            return Chapter(c, style)
+            return Chapter(c, style).also {
+                WordUsage.append(it.calcWordUsage())
+            }
         }
 
     }

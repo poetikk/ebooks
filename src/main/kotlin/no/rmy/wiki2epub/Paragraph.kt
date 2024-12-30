@@ -5,11 +5,10 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
         it.trim()
             .replace("</span>x<br/>", "</span>")
             .replace("</span>x", "</span>").let {
-                if(isPoem || it.startsWith("<p")) {
+                if (isPoem || it.startsWith("<p")) {
                     it
 
-                }
-                else {
+                } else {
                     "<p>\n${
                         it
                     }\n</p>"
@@ -21,6 +20,17 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
 
     override fun epub2html(): String = html()
     override fun epub3html(): String = html()
+    override fun words(): List<String> = content.trim().split("\\s+".toRegex())
+    override fun wordsWithContext(): Map<String, List<String>> = content.trim().lines().flatMap { line ->
+        line.trim().split("\\s+".toRegex()).map {
+            it to line
+        }
+    }.groupBy {
+        it.first
+    }.entries.map {
+        it.key to it.value.map { it.second }
+    }.toMap()
+
 
     companion object {
         fun isPageNumber(s: String): Boolean = s.startsWith("{{page|")
