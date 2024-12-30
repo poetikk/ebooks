@@ -4,7 +4,6 @@ import no.rmy.mediawiki.MwParent
 import no.rmy.mediawiki.MwTag
 
 class BkParagraph(parent: BkPassage?): BkParent(parent) {
-
     override fun append(tag: MwTag) {
         when(tag.name) {
             "text" -> {
@@ -22,6 +21,14 @@ class BkParagraph(parent: BkPassage?): BkParent(parent) {
                 }
             }
 
+            "rettelse" -> {
+                BkRettelse(this).also {
+                    it.append(tag)
+                    children.add(it)
+                }
+            }
+
+
             else -> {
                 val txt = children.lastOrNull() as? BkText ?: BkText(this).also {
                     children.add(it)
@@ -38,6 +45,18 @@ class BkParagraph(parent: BkPassage?): BkParent(parent) {
         }
     }
 
-    override fun renderHtml(): String =
-        "<p>\n${children.joinToString("") { it.renderHtml() }.toString().trim().lines().filter { it.isNotBlank() }.joinToString("\n")}\n</p>"
+    override fun renderHtml(): String = if(hasProperty(Properties.Poetic)) {
+        val content = children.joinToString("") { it.renderHtml() }.trim()
+        content.lines().mapIndexed { index, it ->
+            when(index) {
+                0 -> "&emsp; ${it.trim()} <br/>"
+                else -> "${it.trim()} <br/>"
+            }
+        }.joinToString("\n").let {
+            "<p>\n$it\n</p>"
+        }
+    }
+    else {
+        "<p>\n${children.joinToString("") { it.renderHtml() }.trim().lines().filter { it.isNotBlank() }.joinToString("\n")}\n</p>"
+    }
 }

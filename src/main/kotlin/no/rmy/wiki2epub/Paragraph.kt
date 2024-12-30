@@ -88,6 +88,7 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                         "{{Sperret|",
                         "{{nodent|{{innfelt initial|",
                         "{{Blank linje",
+                        "{{rettelse|",
                         "{{høyre|''"
 
                     ).forEach { searchFor ->
@@ -124,6 +125,10 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                                         revisedLine = revisedLine.split("''").first().let {
                                             "<p class=\"right\">$it</p>"
                                         }
+                                    }
+
+                                    "{{rettelse|" -> {
+                                        revisedLine = revisedLine.replace(oldValue, c.split("|").last())
                                     }
 
                                     else -> {
