@@ -62,7 +62,7 @@ fun main() = runBlocking {
         logger.info("Unique Words: ${WordUsage.usages.size}")
     }
 
-    File("dict.txt").outputStream().writer().use { writer ->
+    File("docs/iliaden_dict.txt").outputStream().writer().use { writer ->
         WordUsage.usages.toSortedMap().filter {
             it.value.size == 1
         }.forEach {
