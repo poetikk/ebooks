@@ -1,23 +1,13 @@
 package no.rmy.wiki2epub
 
-import io.documentnode.epub4j.domain.Author
-import io.documentnode.epub4j.domain.Book
-import io.documentnode.epub4j.domain.Resource
-import io.documentnode.epub4j.epub.EpubWriter
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
+import no.rmy.mediawiki.getAutoNamedLogger
 import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
 
 
 
-fun main() = runBlocking {
+fun main(): Unit = runBlocking {
     val chapters = listOf(
         // Chapter.create(1, 6, false),
         Chapter.create(7, 10, false),
@@ -53,6 +43,22 @@ fun main() = runBlocking {
             Mode.EPUB2 -> Epub2Maker.create(chapters)
             Mode.EPUB3 -> Epub3Maker.create(chapters)
         }
+    }
+
+
+
+    getAutoNamedLogger().let { logger ->
+        logger.info("Unique Words: ${WordUsage.usages.size}")
+    }
+
+    File("docs/iliaden_dict.html").outputStream().writer().use { writer ->
+        writer.append("<html>\n<body>\n<ul>\n")
+        WordUsage.usages.toSortedMap().filter {
+            it.value.size == 1
+        }.forEach {
+            writer.appendLine("<li>${it.key}: ${it.value}</li>")
+        }
+        writer.append("</ul>\n</body>\n</html>\n")
     }
 }
 
@@ -90,6 +96,8 @@ class Page(val page: Int, val source: String?) {
 
 
 interface Tag {
+    fun words(): List<String>
+    fun wordsWithContext(): Map<String, List<String>>
     fun html(): String
     fun epub2html(): String
     fun epub3html(): String
