@@ -1,24 +1,13 @@
 package no.rmy.wiki2epub
 
-import io.documentnode.epub4j.domain.Author
-import io.documentnode.epub4j.domain.Book
-import io.documentnode.epub4j.domain.Resource
-import io.documentnode.epub4j.epub.EpubWriter
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
 import no.rmy.mediawiki.getAutoNamedLogger
 import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
 
 
 
-fun main() = runBlocking {
+fun main(): Unit = runBlocking {
     val chapters = listOf(
         // Chapter.create(1, 6, false),
         Chapter.create(7, 10, false),
@@ -62,12 +51,14 @@ fun main() = runBlocking {
         logger.info("Unique Words: ${WordUsage.usages.size}")
     }
 
-    File("docs/iliaden_dict.txt").outputStream().writer().use { writer ->
+    File("docs/iliaden_dict.html").outputStream().writer().use { writer ->
+        writer.append("<html>\n<body>\n<ul>\n")
         WordUsage.usages.toSortedMap().filter {
             it.value.size == 1
         }.forEach {
-            writer.appendLine("${it.key}: ${it.value}")
+            writer.appendLine("<li>${it.key}: ${it.value}</li>")
         }
+        writer.append("</ul>\n</body>\n</html>\n")
     }
 }
 

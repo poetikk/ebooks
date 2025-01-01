@@ -32,7 +32,7 @@ class Chapter(val content: String, val useStyle: Boolean) {
     }.let { maps ->
         val m = WordUsage()
         maps.map {
-            WordUsage(it)
+            WordUsage(it, title.split("-").first().trim())
         }.let {
             m.append(it)
         }

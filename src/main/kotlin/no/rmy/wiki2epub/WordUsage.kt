@@ -3,9 +3,13 @@ package no.rmy.wiki2epub
 open class WordUsage {
     val usages: MutableMap<String, MutableList<String>>
 
-    constructor(u: Map<String, List<String>>) {
+    constructor(u: Map<String, List<String>>, title: String) {
         usages = u.entries.associate {
-            it.key to it.value.toMutableList()
+            val key = it.key.replace("<[^>]*>".toRegex(), "")
+                .lowercase()
+                // .replace("\\p{Punct}".toRegex(), "")
+                .replace("[^\\wæøå\\s]".toRegex(), "")
+            key to it.value.map { "$it ($title)" }.toMutableList()
         }.toMutableMap()
     }
 
