@@ -5,11 +5,10 @@ open class WordUsage {
 
     constructor(u: Map<String, List<String>>, title: String) {
         usages = u.entries.associate {
-            val key = it.key.replace("<[^>]*>".toRegex(), "")
-                .lowercase()
+            val key = it.key.lowercase()
                 // .replace("\\p{Punct}".toRegex(), "")
-                .replace("[^\\wæøå\\s]".toRegex(), "")
-            key to it.value.map { "$it ($title)" }.toMutableList()
+                .replace("[^\\p{L}\\s]".toRegex(), "")
+            key to it.value.map { "${it.replace("<[^>]*>".toRegex(), "")} ($title)" }.toMutableList()
         }.toMutableMap()
     }
 

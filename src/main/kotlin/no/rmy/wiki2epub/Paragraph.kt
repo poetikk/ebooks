@@ -22,7 +22,7 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
     override fun epub3html(): String = html()
     override fun words(): List<String> = content.trim().split("\\s+".toRegex())
     override fun wordsWithContext(): Map<String, List<String>> = content.trim().lines().flatMap { line ->
-        line.trim().split("\\s+".toRegex()).map {
+        line.replace("<[^>]*>".toRegex(), "").trim().split("\\s+".toRegex()).map {
             it to line
         }
     }.groupBy {

@@ -1,19 +1,14 @@
 package no.rmy.wiki2epub
 
-import io.documentnode.epub4j.domain.Author
-import io.documentnode.epub4j.domain.Book
-import io.documentnode.epub4j.domain.Resource
-import io.documentnode.epub4j.epub.EpubWriter
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
 import java.io.File
-import java.io.FileOutputStream
 import java.io.InputStream
+
 
 class Chapter(val content: String, val useStyle: Boolean) {
     val title: String
