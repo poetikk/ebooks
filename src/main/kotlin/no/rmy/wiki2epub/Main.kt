@@ -9,7 +9,7 @@ import java.io.File
 
 fun main(): Unit = runBlocking {
     Odysseen.generate()
-    // Iliaden.generate()
+    Iliaden.generate()
 }
 
 
