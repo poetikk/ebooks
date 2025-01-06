@@ -31,6 +31,7 @@
     </root>
 
     <logger name="com.tellusr" level="TRACE"/>
+    <logger name="no.rmy" level="TRACE"/>
     <logger name="Exposed" level="WARN"/>
     <logger name="com.zaxxer.hikari" level="WARN"/>
     <logger name="org.eclipse.jetty" level="WARN"/>

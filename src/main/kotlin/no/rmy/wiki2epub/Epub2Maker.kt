@@ -6,15 +6,17 @@ import io.documentnode.epub4j.domain.Resource
 import io.documentnode.epub4j.epub.EpubWriter
 import java.io.File
 import java.io.FileOutputStream
+import java.util.*
 
 
 object Epub2Maker {
-    fun create(chapters: List<Chapter>) {
+    fun create(project: String, chapters: List<Chapter>) {
+        val title = project.replaceFirstChar { it.titlecase(Locale.getDefault()) }
         Mode.current = Mode.EPUB2
 
         val path = when (Mode.current) {
-            Mode.EPUB2 -> "files/epub2"
-            Mode.EPUB3 -> "files/epub3"
+            Mode.EPUB2 -> "files/$project/epub2"
+            Mode.EPUB3 -> "files/$project/epub3"
         }
         File(path).mkdirs()
 
@@ -25,14 +27,14 @@ object Epub2Maker {
 
         val ebook = Book().apply {
             metadata.apply {
-                titles.add("Iliaden")
+                titles.add(title)
                 contributors.add(Author("Homer"))
                 contributors.add(Author("Peder", "Østbye (oversetter)"))
                 contributors.add(Author("Øystein", "Tvede (digital utgave)"))
                 publishers.add("H. ASCHEHOUG & CO. (W. NYGAARD)")
             }
 
-            Resource(File("iliaden_cover.jpg").inputStream(), "iliaden_cover.jpg").let {
+            Resource(File("${project}_cover.jpg").inputStream(), "${project}_cover.jpg").let {
                 setCoverImage(it)
             }
             Resource(File("styles.css").inputStream(), "styles.css").let {
@@ -44,8 +46,8 @@ object Epub2Maker {
 
 
             when (Mode.current) {
-                Mode.EPUB2 -> "kolofon.xhtml"
-                Mode.EPUB3 -> "kolofon3.xhtml"
+                Mode.EPUB2 -> "kolofon_$project.xhtml"
+                Mode.EPUB3 -> "kolofon3_$project.xhtml"
             }.let { filename ->
                 Resource(File(filename).inputStream(), "tittelside.xhtml").let {
                     addResource(it)
@@ -64,8 +66,8 @@ object Epub2Maker {
 
         val ebookWriter = EpubWriter()
         when (Mode.current) {
-            Mode.EPUB2 -> "iliaden_epub2.epub"
-            Mode.EPUB3 -> "iliaden.epub"
+            Mode.EPUB2 -> "${project}_epub2.epub"
+            Mode.EPUB3 -> "${project}.epub"
         }.let {
             ebookWriter.write(ebook, FileOutputStream("docs/download/$it"))
         }

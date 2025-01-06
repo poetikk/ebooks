@@ -8,12 +8,15 @@ import java.util.*
 
 
 object Epub3Maker {
-    fun create(chapters: List<Chapter>) {
+    fun create(project: String, chapters: List<Chapter>) {
+        val title = project.replaceFirstChar {
+            it.titlecase(Locale.getDefault())
+        }
         Mode.current = no.rmy.wiki2epub.Mode.EPUB3
 
         val path = when (Mode.current) {
-            Mode.EPUB2 -> "files/epub2"
-            Mode.EPUB3 -> "files/epub3"
+            Mode.EPUB2 -> "files/$project/epub2"
+            Mode.EPUB3 -> "files/$project/epub3"
         }
         File(path).mkdirs()
 
@@ -25,14 +28,14 @@ object Epub3Maker {
         EpubBook(
             "nb-NO",
             UUID.randomUUID().toString(),
-            "Iliaden",
+            title,
             "Homer"
         ).also { book ->
             book.publisher = "H. ASCHEHOUG & CO. (W. NYGAARD)"
             // Add content
 
 
-            File("iliaden_cover.jpg").inputStream().let {
+            File("${project}_cover.jpg").inputStream().let {
                 book.addCoverImage(
                     it.readAllBytes(),
                     "image/jpeg",
@@ -57,10 +60,10 @@ object Epub3Maker {
             // Create toc
             val tocLinks: MutableList<TocLink> = ArrayList<TocLink>()
 
-            listOf("omslag.xhtml", "kolofon3.xhtml").forEach { filename ->
+            listOf("omslag_$project.xhtml", "kolofon3_$project.xhtml").forEach { filename ->
                 val href = filename.replace("3", "")
-                val id = href.split(".").first()
-                val title = id.uppercase() + "."
+                val id = href.split(".", "_").first()
+                //val title = id.uppercase() + "."
                 File(filename).inputStream().let {
                     book.addContent(
                         it,
@@ -73,7 +76,7 @@ object Epub3Maker {
                 // tocLinks.add(sectionToc)
 
                 val landmark = Landmark()
-                when(href) {
+                when(id) {
                     "omslag" -> landmark.setType("cover")
                     "kolofon" -> landmark.setType("bodymatter")
                 }
@@ -107,8 +110,8 @@ object Epub3Maker {
             book.setLandmarks(landmarks)
 
             when (Mode.current) {
-                Mode.EPUB2 -> "iliaden_epub2.epub"
-                Mode.EPUB3 -> "iliaden.epub"
+                Mode.EPUB2 -> "${project}_epub2.epub"
+                Mode.EPUB3 -> "${project}.epub"
             }.let {
                 book.writeToFile("docs/download/$it")
             }

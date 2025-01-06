@@ -108,51 +108,7 @@ ${body}
   </style>
 
         """.trimIndent()
-
-
-        suspend fun create(firstPage: Int, lastPage: Int, style: Boolean = true): Chapter {
-            val httpClient = HttpClient(CIO)
-            val jsonDecoder = Json {
-                isLenient = true
-            }
-
-            val c = (firstPage..lastPage).mapNotNull { page ->
-                val pageUrl = "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3AIliaden.djvu%2F$page"
-
-                val path = "files"
-                File(path).mkdirs()
-                val filename = "$path/iliaden_$page.wikimedia"
-
-                if (File(filename).exists()) {
-                    File(filename).readText().let {
-                        Page(page, it)
-                    }
-                } else {
-                    val result = httpClient.request {
-                        url(pageUrl)
-                    }
-                    delay(3500)
-
-                    val string = result.bodyAsText()
-                    val source =
-                        jsonDecoder.parseToJsonElement(string).jsonObject.get("source")?.jsonPrimitive?.contentOrNull
-                    if (source != null) {
-                        File(filename).writeText(source)
-                        Page(page, source)
-                    } else {
-                        null
-                    }
-                }
-            }.joinToString("\n") {
-                it.toString()
-            }
-
-
-            return Chapter(c, style).also {
-                WordUsage.append(it.calcWordUsage())
-            }
-        }
-
     }
+
 }
 
