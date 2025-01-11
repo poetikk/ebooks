@@ -10,7 +10,7 @@ import java.io.File
 import java.io.InputStream
 
 
-class Chapter(val content: String, val useStyle: Boolean) {
+class Chapter(val content: String, val useStyle: Boolean, val pageOffset: Int) {
     val title: String
         get() =
             tags().mapNotNull { it as? Heading }.joinToString(" - ") { it.text }
@@ -36,14 +36,14 @@ class Chapter(val content: String, val useStyle: Boolean) {
 
     fun tagsPoem(): List<Tag> =
         content.split(Regex("\\{\\{gap\\|1em\\}\\}|\\{\\{Innrykk\\|1\\}\\}")).map {
-            Paragraph.create(it)
+            Paragraph.create(it, pageOffset = pageOffset)
         }.flatten()
 
     fun tagsNormal(): List<Tag> =
         content.split("\n\n").map {
             it.replace("\n", " ")
         }.map {
-            Paragraph.create(it, false)
+            Paragraph.create(it, false, pageOffset)
         }.flatten()
 
     fun epub3(body: String): String = """

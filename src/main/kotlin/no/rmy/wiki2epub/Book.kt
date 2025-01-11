@@ -13,7 +13,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import no.rmy.mediawiki.getAutoNamedLogger
 import java.io.File
 
-class Book(val project: String, val url: String) {
+class Book(val project: String, val url: String, val pageOffset: Int) {
     class TooManyRequestsException(url: String): Exception("Too many requests when fetching $url")
 
     suspend fun createChapter(firstPage: Int, lastPage: Int, style: Boolean = true): Chapter {
@@ -58,7 +58,7 @@ class Book(val project: String, val url: String) {
         }
 
 
-        return Chapter(c, style).also {
+        return Chapter(c, style, pageOffset).also {
             WordUsage.append(it.calcWordUsage())
         }
     }

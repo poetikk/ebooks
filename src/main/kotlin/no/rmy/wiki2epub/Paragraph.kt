@@ -35,13 +35,13 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
     companion object {
         fun isPageNumber(s: String): Boolean = s.startsWith("{{page|")
 
-        fun toTag(p: List<String>, isPoem: Boolean): Tag = // Paragraph(p.joinToString("\n"))
+        fun toTag(p: List<String>, isPoem: Boolean, pageOffset: Int): Tag = // Paragraph(p.joinToString("\n"))
             if (p.size == 1 && isPageNumber(p.first())) {
-                PageNumber(p.first())
+                PageNumber(p.first(), pageOffset)
             } else {
                 p.filter { it.isNotBlank() }.mapIndexed { index, it ->
                     if (isPageNumber(it)) {
-                        PageNumber(it.trim()).html() + "x"
+                        PageNumber(it.trim(), pageOffset).html() + "¤"
                     } else {
                         if (isPoem) {
                             when (index) {
@@ -67,7 +67,7 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                 }
             }
 
-        fun create(content: String, isPoem: Boolean = true): List<Tag> {
+        fun create(content: String, isPoem: Boolean = true, pageOffset: Int): List<Tag> {
             val queue = mutableListOf<Tag>()
 
             val lines = content.replace("&", "&amp;").trim().lines().toMutableList()
@@ -81,6 +81,10 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                     Heading(line, 2)
                 } else {
                     var revisedLine = line
+                    while(revisedLine.contains("''")) {
+                        revisedLine.replaceFirst("''", "<i>")
+                        revisedLine.replaceFirst("''", "</i>")
+                    }
                     // println("Line: $revisedLine")
                     listOf(
                         "{{innfelt initial ppoem|",
@@ -100,7 +104,7 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                                 when (searchFor) {
                                     "{{page|" -> {
                                         if (!isPoem)
-                                            revisedLine = revisedLine.replace(oldValue, PageNumber(oldValue).html())
+                                            revisedLine = revisedLine.replace(oldValue, PageNumber(oldValue, pageOffset).html())
                                     }
 
                                     "{{Sperret|" -> {
@@ -143,14 +147,14 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                 }
                 if (tag != null) {
                     if (p.isNotEmpty()) {
-                        queue.add(toTag(p, isPoem))
+                        queue.add(toTag(p, isPoem, pageOffset))
                         p.clear()
                     }
                     queue.add(tag)
                 }
             }
             if (p.isNotEmpty()) {
-                queue.add(toTag(p, isPoem))
+                queue.add(toTag(p, isPoem, pageOffset))
             }
             return queue
         }
