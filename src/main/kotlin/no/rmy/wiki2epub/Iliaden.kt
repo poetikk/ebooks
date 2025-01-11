@@ -8,7 +8,7 @@ object Iliaden {
     val url = "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3AIliaden.djvu%2F"
 
     suspend fun generate() {
-        val book = Book(project, url)
+        val book = Book(project, url, 10)
         val chapters = listOf(
             // Chapter.create(1, 6, false),
 
