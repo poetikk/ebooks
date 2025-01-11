@@ -7,7 +7,7 @@ object Odysseen {
     val project = "odysseen"
 
     suspend fun generate() {
-        val book = Book(project, "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3AOdysseen_1922.pdf%2F", 9)
+        val book = Book(project, "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3AOdysseen_1922.pdf%2F", 8)
         val chapters = listOf(
             // Chapter.create(1, 6, false),
             book.createChapter(9, 20),
