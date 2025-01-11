@@ -82,8 +82,8 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                 } else {
                     var revisedLine = line
                     while(revisedLine.contains("''")) {
-                        revisedLine.replaceFirst("''", "<i>")
-                        revisedLine.replaceFirst("''", "</i>")
+                        revisedLine = revisedLine.replaceFirst("''", "<i>")
+                        revisedLine = revisedLine.replaceFirst("''", "</i>")
                     }
                     // println("Line: $revisedLine")
                     listOf(
