@@ -41,7 +41,7 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
             } else {
                 p.filter { it.isNotBlank() }.mapIndexed { index, it ->
                     if (isPageNumber(it)) {
-                        PageNumber(it.trim(), pageOffset).html() + "¤"
+                        PageNumber(it.trim(), pageOffset).html() // + "¤"
                     } else {
                         if (isPoem) {
                             when (index) {
