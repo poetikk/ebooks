@@ -24,19 +24,19 @@ object Miserables {
 
         val chapters = listOf(
             BookInfo(
-                "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3ADe_elendige_1.pdf/",
+                "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3ADe_elendige_1.pdf%2F",
                 2,
                 listOf(9, 43, 103, 238, 143, 187, 200, 275, 297, 329, 342, 399 - 2)
             ),
             BookInfo(
-                url = "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3ADe_elendige_2.pdf/",
+                url = "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3ADe_elendige_2.pdf%2F",
                 pageOffset = 4,
                 listOf(
                     5, 20, 52, 115, 123, 136, 170, 189, 197, 213, 295, 302, 315, 336, 346, 364, 400, 419 - 4
                 )
             ),
             BookInfo(
-                "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3ADe_elendige_3.pdf/",
+                "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3ADe_elendige_3.pdf%2F",
                 4,
                 listOf(
                     5, 21, 28, 41, 49, 72, 80, 99, 119, 185, 227, 241, 275, 301, 332, 347, 392 - 4
