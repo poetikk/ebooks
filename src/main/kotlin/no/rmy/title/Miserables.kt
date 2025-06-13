@@ -46,17 +46,11 @@ object Miserables {
             val offset = it.pageOffset
             val url = it.url
 
-            listOf(
-                it.chapters.dropLast(1),
-                it.chapters.drop(1),
-            )
-
-
             val firstPages = it.chapters.dropLast(1).map { page -> page + offset }
             val lastPages = it.chapters.drop(1).map { page -> page + offset - 1 }
 
             val chapters = firstPages.mapIndexed { index, page ->
-                book.createChapter(page + offset, lastPages.get(index), url = url)
+                book.createChapter(page, lastPages.get(index), url = url)
             }
             chapters
         }.flatten()
