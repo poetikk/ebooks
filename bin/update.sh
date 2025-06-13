@@ -7,10 +7,7 @@ echo "Starting: $(date)"
 rm -rf files*
 git pull
 gradle installDist
-./build/install/wiki2epub/bin/wiki2epub
-ls -1 files/ | wc -l | grep 439 && sleep 3600 && ./build/install/wiki2epub/bin/wiki2epub
-ls -1 files/ | wc -l | grep 439 && sleep 3600 && ./build/install/wiki2epub/bin/wiki2epub
-ls -1 files/ | wc -l | grep 439 || exit
+./build/install/wiki2epub/bin/wiki2epub || sleep 7200  && ./build/install/wiki2epub/bin/wiki2epub || sleep 7200 && ./build/install/wiki2epub/bin/wiki2epub || exit
 bin/epubcheck docs/download/iliaden.epub && git commit -a -m updated && git push
 echo "Finished: $(date)"
 

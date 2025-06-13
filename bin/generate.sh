@@ -5,7 +5,8 @@ cd $SCRIPT_DIR/..
 
 echo "Starting: $(date)"
 git pull
+git pull gdev main
 gradle installDist
-./build/install/wiki2epub/bin/wiki2epub && bin/epubcheck docs/download/iliaden.epub && git commit -a -m updated && git push
+./build/install/wiki2epub/bin/wiki2epub && bin/epubcheck docs/download/iliaden.epub  && bin/epubcheck docs/download/odysseen.epub && git commit -a -m updated && git push
 echo "Finished: $(date)"
 

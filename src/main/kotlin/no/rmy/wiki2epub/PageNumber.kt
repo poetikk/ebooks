@@ -1,9 +1,9 @@
 package no.rmy.wiki2epub
 
-class PageNumber(content: String) : Tag {
+class PageNumber(content: String, offset: Int) : Tag {
     val text2 = content.trim().split("|").last().trimEnd('}')
     val number: Int? = text2.toIntOrNull()?.let {
-        val page = it - 10
+        val page = it - offset
         if (page > 0)
             page
         else
