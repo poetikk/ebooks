@@ -41,7 +41,7 @@ class Book(val project: String, val defaultUrl: String, val pageOffset: Int = 0)
                 if(result.status == HttpStatusCode.TooManyRequests) {
                     throw TooManyRequestsException(pageUrl)
                 }
-                delay(3500)
+                delay(3500 * 5)
 
                 val string = result.bodyAsText()
                 val source =
