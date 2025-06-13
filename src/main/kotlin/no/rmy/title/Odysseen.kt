@@ -1,6 +1,11 @@
-package no.rmy.wiki2epub
+package no.rmy.title
 
 import no.rmy.mediawiki.getAutoNamedLogger
+import no.rmy.wiki2epub.Book
+import no.rmy.wiki2epub.Epub2Maker
+import no.rmy.wiki2epub.Epub3Maker
+import no.rmy.wiki2epub.Mode
+import no.rmy.wiki2epub.WordUsage
 import java.io.File
 
 object Odysseen {
@@ -39,18 +44,18 @@ object Odysseen {
         logger.info("Generating chapters complete")
 
         Mode.entries.forEach { currentMode ->
-            Mode.current = currentMode
+            Mode.Companion.current = currentMode
             when (currentMode) {
                 Mode.EPUB2 -> Epub2Maker.create(project, chapters)
                 Mode.EPUB3 -> Epub3Maker.create(project, chapters)
             }
         }
 
-        logger.info("Unique Words: ${WordUsage.usages.size}")
+        logger.info("Unique Words: ${WordUsage.Companion.usages.size}")
 
         File("docs/${project}_dict.html").outputStream().writer().use { writer ->
             writer.append("<html>\n<body>\n<ul>\n")
-            WordUsage.usages.toSortedMap().filter {
+            WordUsage.Companion.usages.toSortedMap().filter {
                 it.value.size == 1
             }.forEach {
                 writer.appendLine("<li>${it.key}: ${it.value}</li>")

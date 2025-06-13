@@ -2,13 +2,13 @@ package no.rmy.wiki2epub
 
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
-import no.rmy.mediawiki.getAutoNamedLogger
-import java.io.File
-
+import no.rmy.title.Miserables
+import no.rmy.title.Odysseen
 
 
 fun main(): Unit = runBlocking {
-    Odysseen.generate()
+    Miserables.generate()
+    // Odysseen.generate()
     // Iliaden.generate()
 }
 

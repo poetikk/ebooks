@@ -13,10 +13,10 @@ import kotlinx.serialization.json.jsonPrimitive
 import no.rmy.mediawiki.getAutoNamedLogger
 import java.io.File
 
-class Book(val project: String, val url: String) {
+class Book(val project: String, val defaultUrl: String) {
     class TooManyRequestsException(url: String): Exception("Too many requests when fetching $url")
 
-    suspend fun createChapter(firstPage: Int, lastPage: Int, style: Boolean = true): Chapter {
+    suspend fun createChapter(firstPage: Int, lastPage: Int, style: Boolean = true, url: String = this.defaultUrl): Chapter {
         val httpClient = HttpClient(CIO)
         val jsonDecoder = Json {
             isLenient = true
