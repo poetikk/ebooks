@@ -21,7 +21,8 @@ class Book(val project: String, val defaultUrl: String, val defaultPageOffset: I
         lastPage: Int,
         style: Boolean = true,
         url: String = this.defaultUrl,
-        pageOffset: Int = defaultPageOffset
+        pageOffset: Int = defaultPageOffset,
+        volume: Int = 0,
     ): Chapter {
         val httpClient = HttpClient(CIO)
         val jsonDecoder = Json {
@@ -33,7 +34,7 @@ class Book(val project: String, val defaultUrl: String, val defaultPageOffset: I
 
             val path = "files/$project"
             File(path).mkdirs()
-            val filename = "$path/${project}_$page.wikimedia"
+            val filename = "$path/${project}_${volume}_$page.wikimedia"
             logger.info(filename)
 
             if (File(filename).exists()) {

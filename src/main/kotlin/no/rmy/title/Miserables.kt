@@ -42,15 +42,15 @@ object Miserables {
                     5, 21, 28, 41, 49, 72, 80, 99, 119, 185, 227, 241, 275, 301, 332, 347, 392 - 4
                 )
             )
-        ).map {
-            val offset = it.pageOffset
-            val url = it.url
+        ).mapIndexed { volumeIndex, volumeInfo ->
+            val offset = volumeInfo.pageOffset
+            val url = volumeInfo.url
 
-            val firstPages = it.chapters.dropLast(1).map { page -> page + offset }
-            val lastPages = it.chapters.drop(1).map { page -> page + offset - 1 }
+            val firstPages = volumeInfo.chapters.dropLast(1).map { page -> page + offset }
+            val lastPages = volumeInfo.chapters.drop(1).map { page -> page + offset - 1 }
 
             val chapters = firstPages.mapIndexed { index, page ->
-                book.createChapter(page, lastPages.get(index), url = url)
+                book.createChapter(page, lastPages.get(index), url = url, volume = volumeIndex)
             }
             chapters
         }.flatten()
