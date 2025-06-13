@@ -10,8 +10,6 @@ import java.io.File
 import kotlin.collections.flatten
 
 
-
-
 object Miserables {
     val project = "miserables"
 
@@ -26,7 +24,7 @@ object Miserables {
 
         val chapters = listOf(
             BookInfo(
-                "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3ADe_elendige_1.pdf/"
+                "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3ADe_elendige_1.pdf/",
                 2,
                 listOf(9, 43, 103, 238, 143, 187, 200, 275, 297, 329, 342, 399 - 2)
             ),
