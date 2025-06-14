@@ -10,13 +10,16 @@ class Chapter(val content: String, val useStyle: Boolean, val pageOffset: Int, v
             it.text
         }.ifBlank {
             null
-        } ?: content.trim().split("\\s+".toRegex()).take(10).plus("...").let {
+        } ?: content.replace("\\{\\{.*?\\}\\}".toRegex(), "").trim().split("\\s+".toRegex()).map {
+            it.trim()
+        }.take(10).plus("...").let {
             listOfNotNull(
                 chStart,
                 it.joinToString(" "),
             ).joinToString(": ")
 
         }
+
     fun inputStream(): InputStream = html().byteInputStream()
 
     fun tags(): List<Tag> = if (useStyle)
