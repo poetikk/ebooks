@@ -1,16 +1,22 @@
 package no.rmy.wiki2epub
 
 import java.io.InputStream
+import kotlin.collections.joinToString
 
 
-class Chapter(val content: String, val useStyle: Boolean, val pageOffset: Int) {
+class Chapter(val content: String, val useStyle: Boolean, val pageOffset: Int, val chStart: String?) {
     val title: String
         get() = tags().mapNotNull { it as? Heading }.joinToString(" - ") {
             it.text
         }.ifBlank {
             null
-        } ?: content.lines().first().trim().split(" ").take(5).plus("...").joinToString(" ")
+        } ?: content.trim().split("\\s+".toRegex()).take(10).plus("...").let {
+            listOfNotNull(
+                chStart,
+                it.joinToString(" "),
+            ).joinToString(": ")
 
+        }
     fun inputStream(): InputStream = html().byteInputStream()
 
     fun tags(): List<Tag> = if (useStyle)
