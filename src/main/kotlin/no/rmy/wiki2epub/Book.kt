@@ -65,7 +65,7 @@ class Book(val project: String, val defaultUrl: String, val defaultPageOffset: I
         }
 
 
-        return Chapter(c, style, pageOffset, "Ch:$volume.${firstPage - pageOffset}").also {
+        return Chapter(c, style, pageOffset, "Ch:${volume + 1}.${firstPage - pageOffset}").also {
             WordUsage.append(it.calcWordUsage())
         }
     }

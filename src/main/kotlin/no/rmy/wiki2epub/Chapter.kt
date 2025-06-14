@@ -10,7 +10,12 @@ class Chapter(val content: String, val useStyle: Boolean, val pageOffset: Int, v
             it.text
         }.ifBlank {
             null
-        } ?: content.replace("\\{\\{.*?\\}\\}".toRegex(), "").trim().split("\\s+".toRegex()).map {
+        } ?: content.replace("\\{\\{.*?\\}\\}".toRegex(), "")
+            .replace("}}", "")
+            .replace("{{", "")
+            .lines().filter {
+            it.isNotBlank()
+        }.joinToString(" ").trim().split("\\s+".toRegex()).map {
             it.trim()
         }.take(10).plus("...").let {
             listOfNotNull(
