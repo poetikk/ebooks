@@ -21,15 +21,21 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
     override fun epub2html(): String = html()
     override fun epub3html(): String = html()
     override fun words(): List<String> = content.trim().split("\\s+".toRegex())
-    override fun wordsWithContext(): Map<String, List<String>> = content.trim().lines().flatMap { line ->
-        line.replace("<[^>]*>".toRegex(), "").trim().split("\\s+".toRegex()).map {
-            it to line
+    override fun wordsWithContext(): Map<String, List<String>> = content
+        .trim()                                     // Remove leading/trailing whitespace
+        .lines()                                    // Split into lines
+        .flatMap { line ->                         // Process each line
+            line.replace("<[^>]*>".toRegex(), "")  // Remove HTML tags
+                .trim()                             // Trim each line
+                .split("\\s+".toRegex())           // Split into words
+                .map {
+                    it to line
+                }                // Pair each word with its line
         }
-    }.groupBy {
-        it.first
-    }.entries.map {
-        it.key to it.value.map { it.second }
-    }.toMap()
+        .groupBy { it.first }                      // Group by words
+        .entries.associate {                             // Transform entries
+            it.key to it.value.map { it.second }   // Map to word -> list of lines
+        }                                   // Convert to final map
 
 
     companion object {
@@ -52,9 +58,9 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                             //"<span class=\"line\">$it</span>"
                             //it
                         } else {
-                            it.split(Regex("\\s+")).chunked(10).map {
+                            it.split(Regex("\\s+")).chunked(10).joinToString("\n") {
                                 it.joinToString(" ")
-                            }.joinToString("\n")
+                            }
                         }
                     }
                 }.let {

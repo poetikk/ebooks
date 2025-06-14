@@ -1,19 +1,15 @@
 package no.rmy.wiki2epub
 
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import kotlinx.coroutines.delay
-import kotlinx.serialization.json.*
-import java.io.File
 import java.io.InputStream
 
 
 class Chapter(val content: String, val useStyle: Boolean, val pageOffset: Int) {
     val title: String
-        get() =
-            tags().mapNotNull { it as? Heading }.joinToString(" - ") { it.text }
+        get() = tags().mapNotNull { it as? Heading }.joinToString(" - ") {
+            it.text
+        }.ifBlank {
+            null
+        } ?: content.lines().first().trim().split(" ").take(5).plus("...").joinToString(" ")
 
     fun inputStream(): InputStream = html().byteInputStream()
 

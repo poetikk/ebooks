@@ -60,7 +60,9 @@ object Epub3Maker {
             // Create toc
             val tocLinks: MutableList<TocLink> = ArrayList<TocLink>()
 
-            listOf("omslag_$project.xhtml", "kolofon3_$project.xhtml").forEach { filename ->
+            listOf("omslag_$project.xhtml", "kolofon3_$project.xhtml").filter {
+                File(it).exists()
+            }.forEach { filename ->
                 val href = filename.replace("3", "")
                 val id = href.split(".", "_").first()
                 //val title = id.uppercase() + "."

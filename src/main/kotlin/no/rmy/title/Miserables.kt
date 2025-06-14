@@ -58,18 +58,18 @@ object Miserables {
 
         logger.info("Generating chapters complete")
         Mode.entries.forEach { currentMode ->
-            Mode.Companion.current = currentMode
+            Mode.current = currentMode
             when (currentMode) {
                 Mode.EPUB2 -> Epub2Maker.create(project, chapters)
                 Mode.EPUB3 -> Epub3Maker.create(project, chapters)
             }
         }
 
-        logger.info("Unique Words: ${WordUsage.Companion.usages.size}")
+        logger.info("Unique Words: ${WordUsage.usages.size}")
 
         File("docs/${project}_dict.html").outputStream().writer().use { writer ->
             writer.append("<html>\n<body>\n<ul>\n")
-            WordUsage.Companion.usages.toSortedMap().filter {
+            WordUsage.usages.toSortedMap().filter {
                 it.value.size == 1
             }.forEach {
                 writer.appendLine("<li>${it.key}: ${it.value}</li>")
