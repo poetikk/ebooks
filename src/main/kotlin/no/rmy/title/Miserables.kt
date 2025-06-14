@@ -50,7 +50,13 @@ object Miserables {
             val lastPages = volumeInfo.chapters.drop(1).map { page -> page + offset - 1 }
 
             val chapters = firstPages.mapIndexed { index, page ->
-                book.createChapter(page, lastPages.get(index), url = url, volume = volumeIndex)
+                book.createChapter(
+                    page,
+                    lastPages.get(index),
+                    url = url,
+                    volume = volumeIndex,
+                    pageOffset = offset
+                )
             }
             chapters
         }.flatten()

@@ -13,6 +13,7 @@ class Chapter(val content: String, val useStyle: Boolean, val pageOffset: Int, v
         } ?: content.replace("\\{\\{.*?\\}\\}".toRegex(), "")
             .replace("}}", "")
             .replace("{{", "")
+            .replace("<[^>]*>".toRegex(), "")
             .lines().filter {
             it.isNotBlank()
         }.joinToString(" ").trim().split("\\s+".toRegex()).map {
