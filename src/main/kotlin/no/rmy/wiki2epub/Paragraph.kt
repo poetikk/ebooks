@@ -79,15 +79,28 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
             val lines = content.replace("&", "&amp;").trim().lines().toMutableList()
             val p = mutableListOf<String>()
             while (lines.isNotEmpty()) {
-                val line = lines.first()
+                var line = lines.first().trimStart()
                 lines.removeFirst()
+                listOf("{{sp").forEach { s ->
+                    if(!line.startsWith(s) && line.contains(s)) {
+                        line.split(s, limit = 2).let {
+                            lines.add(0, s + it.last())
+                            line = it.first()
+                        }
+                    }
+                }
+
+
                 var tag: Tag? = if (
                     line.startsWith("{{midtstilt|{{stor")
-                    || line.startsWith("{{sp|{{xx-større")
+                    || line.startsWith("{{sp|{{xx-større|")
+                    || line.startsWith("{{sperret|{{xx-større|")
                     ) {
                     Heading(line, 1)
                 } else if (line.startsWith("{{midtstilt|")
                     || line.startsWith("{{sp|{{x-større")
+                    || line.startsWith("{{sperret|{{x-større|")
+                    || line.startsWith("{{c|")
                     ) {
                     Heading(line, 2)
                 } else {
@@ -101,10 +114,12 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                         "{{innfelt initial ppoem|",
                         "{{page|",
                         "{{Sperret|",
+                        "{{sperret|",
                         "{{nodent|{{innfelt initial|",
                         "{{Blank linje",
                         "{{rettelse|",
-                        "{{høyre|''"
+                        "{{høyre|''",
+                        "{{høyre|"
                     ).forEach { searchFor ->
                         var tries = 5
                         while (--tries > 0 && revisedLine.contains(searchFor)) {
@@ -117,7 +132,7 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                                             revisedLine = revisedLine.replace(oldValue, PageNumber(oldValue, pageOffset).html())
                                     }
 
-                                    "{{Sperret|" -> {
+                                    "{{Sperret|", "{{sperret|" -> {
                                         revisedLine = revisedLine.replace(oldValue, "<em>$c</em>")
                                     }
 
@@ -134,7 +149,7 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                                         revisedLine = revisedLine.replace("}}", "")
                                     }
 
-                                    "{{høyre|''" -> {
+                                    "{{høyre|''", "{{høyre|" -> {
                                         revisedLine = revisedLine.replace(oldValue, "$c")
                                         revisedLine = revisedLine.split("''").first().let {
                                             "<p class=\"right\">$it</p>"

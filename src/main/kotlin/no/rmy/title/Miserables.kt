@@ -26,7 +26,7 @@ object Miserables {
             BookInfo(
                 "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3ADe_elendige_1.pdf%2F",
                 2,
-                listOf(9, 43, 103, 238, 143, 187, 200, 275, 297, 329, 342, 399 - 2)
+                listOf(9, 43, 103, 138, 143, 187, 200, 275, 297, 329, 342, 399 - 2)
             ),
             BookInfo(
                 url = "https://api.wikimedia.org/core/v1/wikisource/no/page/Side%3ADe_elendige_2.pdf%2F",
