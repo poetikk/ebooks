@@ -54,6 +54,7 @@ object Miserables {
                     page,
                     lastPages.get(index),
                     url = url,
+                    style = false,
                     volume = volumeIndex,
                     pageOffset = offset
                 )
