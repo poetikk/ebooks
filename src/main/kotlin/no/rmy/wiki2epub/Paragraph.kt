@@ -81,9 +81,14 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
             while (lines.isNotEmpty()) {
                 val line = lines.first()
                 lines.removeFirst()
-                var tag: Tag? = if (line.startsWith("{{midtstilt|{{stor")) {
+                var tag: Tag? = if (
+                    line.startsWith("{{midtstilt|{{stor")
+                    || line.startsWith("{{sp|{{xx-større")
+                    ) {
                     Heading(line, 1)
-                } else if (line.startsWith("{{midtstilt|")) {
+                } else if (line.startsWith("{{midtstilt|")
+                    || line.startsWith("{{sp|{{x-større")
+                    ) {
                     Heading(line, 2)
                 } else {
                     var revisedLine = line
@@ -100,7 +105,6 @@ class Paragraph(val content: String, val isPoem: Boolean) : Tag {
                         "{{Blank linje",
                         "{{rettelse|",
                         "{{høyre|''"
-
                     ).forEach { searchFor ->
                         var tries = 5
                         while (--tries > 0 && revisedLine.contains(searchFor)) {
